@@ -1,6 +1,6 @@
 #!/usr/bin/env bb
 
-(ns rsynczy
+(ns rzy
   (:require
    [babashka.pods :as pods]
    [babashka.process :as p]
