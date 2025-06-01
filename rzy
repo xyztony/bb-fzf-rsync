@@ -1,4 +1,6 @@
-(ns main
+#!/usr/bin/env bb
+
+(ns rzy
   (:require
    [babashka.pods :as pods]
    [babashka.process :as p]
@@ -68,6 +70,10 @@
               (h/from [:sync_jobs :sj])
               (h/join [:remotes :r] [:= :sj.remote_id :r.id])
               (h/order-by :sj.name))))
+
+(comment
+  (jobs)
+  )
 
 (defn remote-by-id [id]
   (first (query! (-> (h/select :*)
@@ -256,9 +262,9 @@
               user (fzf [(System/getProperty "user.name")]
                         :prompt "Username (or type): " :allow-custom true)]
              (when (and (re-matches host-name-regex host)
-                      (re-matches name-regex user)
-                      (<= (count host) 253)
-                      (<= (count user) 32))
+                        (re-matches name-regex user)
+                        (<= (count host) 253)
+                        (<= (count user) 32))
                (add-remote name host user)
                (remote-by-name name))))
 
@@ -276,8 +282,8 @@
 
         :else ; entered a new name
         (when (and (re-matches name-regex choice)
-                 (<= (count choice) 50)
-                 (not (contains? remote-names choice)))
+                   (<= (count choice) 50)
+                   (not (contains? remote-names choice)))
           (create-remote-interactive choice))))))
 
 (defn create-job []
@@ -286,7 +292,7 @@
                        :prompt "Source path (or type): " :allow-custom true)
               dest (fzf ["/tmp/" "~/backup/" "/var/backups/"]
                         :prompt "Destination path (or type): " :allow-custom true)
-              opts-map {"Default" "-av" 
+              opts-map {"Default" "-av"
                         "Mirror" "-av --delete"
                         "Compress" "-avz"}
               opts-choice (fzf (keys opts-map) :prompt "Rsync options (or type): " :allow-custom true)
